@@ -25,6 +25,7 @@ function App() {
 }
 
 function Accordion({ faqs }) {
+  const [currentlyOpen, setCurrentlyOpen] = useState(null);
   return (
     <div className="accordion">
       {faqs.map((question, index) => (
@@ -32,17 +33,22 @@ function Accordion({ faqs }) {
           num={index}
           title={question.title}
           text={question.text}
+          currentlyOpen={currentlyOpen}
+          onOpen={setCurrentlyOpen}
         />
       ))}
     </div>
   );
 }
 
-function AccordionItem({ num, title, text }) {
-  const [isOpen, setIsOpen] = useState(false);
+function AccordionItem({ num, title, text, currentlyOpen, onOpen }) {
+  const isOpen = currentlyOpen === num;
+  function handleToggle() {
+    onOpen(isOpen ? null : num);
+  }
 
   return (
-    <div className={`item ${isOpen ? "open" : ""}`} onClick={() => setIsOpen((isOpen) => !isOpen)}>
+    <div className={`item ${isOpen ? "open" : ""}`} onClick={handleToggle}>
       <p className="number">{`0${num + 1}`}</p>
       <p className="title">{title}</p>
       <p className="icon">{isOpen ? "-" : "+"}</p>
